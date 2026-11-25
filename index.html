@@ -171,7 +171,6 @@ input[type=number]{font:600 20px 'Space Grotesk',sans-serif}
 <div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="app.js"></script>
-<script src="ext.js"></script>
+<script>['app.js','ext.js'].forEach(s=>{const e=document.createElement('script');e.src=s+'?t='+Date.now();e.async=false;document.body.appendChild(e)})</script>
 </body>
 </html>
