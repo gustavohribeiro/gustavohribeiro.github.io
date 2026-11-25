@@ -18,13 +18,14 @@ function status(s,t){if(!t)return['Leer','var(--track)','var(--mute)'];const r=s
 function draw(){const d=data(),box=document.getElementById('phaseAlt');if(!d||!box)return;
  const names=['Vor der Reise','Brasilien','Nach der Reise'],keys=['pre','br','post'];
  const cards=[[0,d.preS,d.preT],[1,d.brS,d.brT],[2,0,d.post]].map(([i,s,t])=>{const st=status(s,t);return '<button data-go="'+keys[i]+'"><div class="row"><span class="muted" style="font-weight:600">'+names[i]+'</span><span class="st" style="background:'+st[1]+';color:'+st[2]+'">'+(i===d.ph?'Jetzt':st[0])+'</span></div><div class="num" style="font-size:32px">'+f(t-s)+' €</div><span class="muted">übrig von '+f(t)+' €</span><div class="bar" style="margin-top:4px"><i style="width:'+Math.min(100,t?s/t*100:0)+'%"></i></div></button>'}).join('');
- box.innerHTML='<div class="car">'+cards+'</div><div class="cdots"><i></i><i></i><i></i></div>';
+ document.getElementById('phases').style.display='none';box.innerHTML='<div class="car">'+cards+'</div><div class="cdots"><i></i><i></i><i></i></div>';
  const car=box.querySelector('.car'),dots=box.querySelectorAll('.cdots i'),set=i=>dots.forEach((x,j)=>x.classList.toggle('on',j===i));set(d.ph);
  requestAnimationFrame(()=>{const c=car.children[d.ph];if(c)car.scrollLeft=c.offsetLeft-16});
  car.addEventListener('scroll',()=>{const w=car.children[0].offsetWidth+12;set(Math.round(car.scrollLeft/w))},{passive:true})}
 function init(){const ph=document.getElementById('phases');if(!ph)return setTimeout(init,100);
+ if(!localStorage.getItem('brasilState2')){const v=document.querySelector('[data-view].on');if(v)v.click()}
  if(!document.getElementById('phaseAlt')){const b=document.createElement('div');b.id='phaseAlt';ph.after(b)}
- ph.style.display='none';
  new MutationObserver(()=>setTimeout(draw,0)).observe(ph,{childList:true});draw()}
 init();
+init=null;
 })();

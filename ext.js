@@ -15,7 +15,7 @@ document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');i
  if(td)td.style.display='none';
  if(route){route.style.fontSize='12px';route.style.padding='0 4px'}
  if(pill){pill.style.fontSize='12px';pill.style.padding='4px 9px'}
- if(row&&h1&&left){row.className='head';row.style.cssText='padding:0 4px';delete h1.dataset.t;const card=left.closest('.card');if(card)card.style.display='none';
+ if(row&&h1&&left){row.className='head';row.style.cssText='padding:0 4px';delete h1.dataset.t;const card=left.closest('.card');if(card){card.style.cssText='display:flex;flex-direction:column;gap:8px;background:none;padding:0 4px';[...card.children].slice(0,2).forEach(c=>c.style.display='none')}
   const sync=()=>{h1.textContent=left.textContent+' R$';h1.classList.toggle('neg',left.classList.contains('neg'))};sync();new MutationObserver(sync).observe(left,{childList:true,characterData:true,subtree:true,attributes:true})}}}
 {const s=document.createElement('script');s.src='/alt.js?t='+Date.now();document.body.appendChild(s)}
 })();
