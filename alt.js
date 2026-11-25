@@ -1,44 +1,43 @@
 (()=>{
 const TS=new Date('2026-12-27T00:00:00'),TE=new Date('2027-01-16T23:59:59');
 const f=n=>Math.round(n).toLocaleString('de-DE');const N=v=>{const n=parseFloat(String(v).replace(',','.'));return isFinite(n)?n:0};
+const e=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const css=document.createElement('style');css.textContent=`
 .alt-l{font-size:11px;font-weight:700;letter-spacing:.6px;color:var(--g);text-transform:uppercase;margin-bottom:10px}
-.tl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));position:relative;margin-top:6px}
-.tl:before{content:'';position:absolute;left:16%;right:16%;top:13px;height:2px;background:var(--track)}
-.tl>div{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;position:relative}
-.tl .dot{width:28px;height:28px;border-radius:50%;background:var(--track);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--mute)}
-.tl .on .dot{background:var(--g);color:#070B16;box-shadow:0 0 0 6px rgba(110,139,255,.18)}
-.tl .done .dot{background:var(--y);color:#070B16}
-.sbar{display:flex;height:16px;border-radius:8px;overflow:hidden;gap:2px;margin:10px 0 12px}
-.sbar i{display:block;height:100%}
-.leg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}
-.leg div{display:flex;align-items:center;gap:8px;font-size:13px}.leg b{margin-left:auto;font-weight:600}
-.leg s{width:10px;height:10px;border-radius:3px;flex:none;text-decoration:none}
-.rings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
-.rings svg{width:76px;height:76px;display:block;margin:0 auto 6px}
-.wf div.r{display:grid;grid-template-columns:92px minmax(0,1fr) 70px;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.wf .t{height:12px;position:relative}.wf .t i{position:absolute;top:0;bottom:0;border-radius:4px}
-.wf .v{text-align:right;font-weight:600}`;document.head.appendChild(css);
-function data(){let S;try{S=JSON.parse(localStorage.getItem('brasilState2'))}catch(e){}if(!S)return null;
+.ck{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:14px}.ck i{width:18px;height:18px;border-radius:6px;border:2px solid var(--dim);flex:none}.ck.done i{background:var(--g);border-color:var(--g)}.ck b{margin-left:auto;font-weight:600}
+.chips2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chips2 button{background:var(--track);border:0;color:var(--ink);border-radius:999px;padding:7px 12px;font:600 12px Inter,sans-serif;cursor:pointer}
+.car{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 4px;scrollbar-width:none}.car::-webkit-scrollbar{display:none}
+.car>button{flex:0 0 82%;scroll-snap-align:center;text-align:left;background:var(--card);border:0;color:inherit;font:inherit;border-radius:24px;padding:18px;cursor:pointer;display:flex;flex-direction:column;gap:8px}
+.cdots{display:flex;gap:6px;justify-content:center;margin-top:10px}.cdots i{width:6px;height:6px;border-radius:3px;background:var(--track)}
+.amp>button{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:inherit;font:inherit;padding:12px 0;cursor:pointer;text-align:left}.amp>button:last-child{border-bottom:0}
+.st{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}`;document.head.appendChild(css);
+function data(){let S;try{S=JSON.parse(localStorage.getItem('brasilState2'))}catch(x){}if(!S)return null;
  const R=N(S.rate||5.9),my=i=>i.share==='me'?1:i.share==='luca'?0:.5,fv=i=>S.view==='me'?my(i):1,sp=id=>(S.spent||{})[id]||0;
- const pre=S.pre||[],it=S.items||[];
+ const pre=S.pre||[],it=S.items||[],costs=S.costs||[];
  const preT=pre.reduce((s,p)=>s+N(p.budget)*fv(p),0),preS=pre.reduce((s,p)=>s+sp(p.id)*fv(p),0);
  const brT=it.reduce((s,i)=>s+N(i.budget)*fv(i),0)/R,brS=it.reduce((s,i)=>s+sp(i.id)*fv(i),0)/R;
- const post=(S.costs||[]).reduce((s,c)=>s+N(c.amt)*N(c.months),0);
+ const post=costs.reduce((s,c)=>s+N(c.amt)*N(c.months),0);
  const inc=(S.income||[]).filter(i=>i.on).reduce((s,i)=>s+N(i.amt),0);
  const preM=pre.reduce((s,p)=>s+Math.max(N(p.budget),sp(p.id))*my(p),0),brM=it.reduce((s,i)=>s+N(i.budget)*my(i),0)/R;
  const buf=inc-post-preM-brM,now=new Date(),ph=now<TS?0:now<=TE?1:2;
- return {preT,preS,brT,brS,post,inc,preM,brM,buf,ph,R}}
-function ring(p,c){const C=2*Math.PI*30,fr=Math.max(0,Math.min(1,p));return '<svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="30" fill="none" stroke="var(--track)" stroke-width="8"/><circle cx="36" cy="36" r="30" fill="none" stroke="'+c+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(C*fr).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 36 36)"/><text x="36" y="41" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">'+Math.round(fr*100)+'%</text></svg>'}
+ return {S,R,pre,it,costs,sp,fv,preT,preS,brT,brS,post,inc,preM,brM,buf,ph}}
+function status(s,t){if(!t)return['Leer','var(--track)','var(--mute)'];const r=s/t;return r>1?['Drüber','rgba(255,122,107,.18)','var(--r)']:r>.85?['Knapp','rgba(245,197,66,.18)','var(--y)']:['Im Plan','rgba(91,216,138,.16)','var(--g)']}
 function draw(){const d=data(),box=document.getElementById('phaseAlt');if(!d||!box)return;
- const P=[['Vor der Reise',d.preS,d.preT,'#FFD84D'],['Brasilien',d.brS,d.brT,'#6E8BFF'],['Nach der Reise',0,d.post,'#38E1D6']];
- const A='<div class="card"><div class="alt-l">Variante A · Zeitstrahl</div><div class="tl">'+P.map((p,i)=>'<div class="'+(i===d.ph?'on':i<d.ph?'done':'')+'"><span class="dot">'+(i+1)+'</span><b style="font-size:13px">'+p[0]+'</b><span class="muted">'+f(p[2])+' €</span></div>').join('')+'</div><div class="row" style="margin-top:14px"><span class="muted">Puffer danach</span><b class="num'+(d.buf<0?' neg':'')+'" style="font-size:20px">'+f(d.buf)+' €</b></div></div>';
- const tot=Math.max(d.inc,d.preM+d.brM+d.post+Math.max(0,d.buf),1),seg=[['Vor der Reise',d.preM,'#FFD84D'],['Brasilien',d.brM,'#6E8BFF'],['Fixkosten',d.post,'#38E1D6'],['Puffer',Math.max(0,d.buf),'#3EE6A8']];
- const B='<div class="card"><div class="alt-l">Variante B · Wohin geht dein Geld</div><div class="row"><span class="muted">Dein Geld bis Februar</span><b class="num" style="font-size:22px">'+f(d.inc)+' €</b></div><div class="sbar">'+seg.map(s=>'<i style="width:'+(s[1]/tot*100)+'%;background:'+s[2]+'"></i>').join('')+'</div><div class="leg">'+seg.map(s=>'<div><s style="background:'+s[2]+'"></s>'+s[0]+'<b>'+f(s[1])+' €</b></div>').join('')+'</div>'+(d.buf<0?'<p class="muted neg" style="margin:10px 0 0">Es fehlen '+f(-d.buf)+' €</p>':'')+'</div>';
- const C='<div class="card"><div class="alt-l">Variante C · Ringe</div><div class="rings">'+P.map(p=>'<div>'+ring(p[2]?p[1]/p[2]:0,p[3])+'<b style="font-size:13px">'+p[0]+'</b><div class="muted">'+f(p[1])+' / '+f(p[2])+' €</div></div>').join('')+'</div><div class="row" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)"><span class="muted">Puffer danach</span><b class="num'+(d.buf<0?' neg':'')+'" style="font-size:20px">'+f(d.buf)+' €</b></div></div>';
- const mx=Math.max(d.inc,1);let run=d.inc;const rows=[['Einnahmen',0,d.inc,'#3EE6A8',d.inc]];[['Vor der Reise',d.preM,'#FFD84D'],['Brasilien',d.brM,'#6E8BFF'],['Fixkosten',d.post,'#38E1D6']].forEach(s=>{const a=run-s[1];rows.push([s[0],Math.max(0,a),run,s[2],-s[1]]);run=a});
- const D='<div class="card"><div class="alt-l">Variante D · Geld-Fluss</div><div class="wf">'+rows.map(r=>'<div class="r"><span class="muted">'+r[0]+'</span><div class="t"><i style="left:'+(Math.min(r[1],r[2])/mx*100)+'%;width:'+(Math.abs(r[2]-r[1])/mx*100)+'%;background:'+r[3]+'"></i></div><span class="v">'+(r[4]<0?'−':'')+f(Math.abs(r[4]))+' €</span></div>').join('')+'<div class="r" style="border-top:1px solid var(--line);margin-top:4px;padding-top:10px"><b>Puffer</b><div class="t"><i style="left:0;width:'+(Math.max(0,d.buf)/mx*100)+'%;background:var(--g)"></i></div><span class="v'+(d.buf<0?' neg':'')+'">'+f(d.buf)+' €</span></div></div></div>';
- box.innerHTML=A+B+C+D}
+ const names=['Vor der Reise','Brasilien','Nach der Reise'],keys=['pre','br','post'];
+ let list='';if(d.ph===0)list=d.pre.map(p=>{const s=d.sp(p.id),b=N(p.budget);return '<div class="ck'+(s>=b&&b>0?' done':'')+'"><i></i>'+e(p.label)+'<b>'+f(s)+' / '+f(b)+' €</b></div>'}).join('');
+ else if(d.ph===1)list=d.it.slice().sort((a,b)=>N(b.budget)-N(a.budget)).slice(0,4).map(i=>'<div class="ck"><i></i>'+e(i.label)+'<b>'+f(d.sp(i.id))+' / '+f(N(i.budget))+' R$</b></div>').join('');
+ else list=d.costs.slice(0,4).map(c=>'<div class="ck"><i></i>'+e(c.label)+'<b>'+f(N(c.amt))+' €</b></div>').join('');
+ const curT=[d.preT,d.brT,d.post][d.ph],curS=[d.preS,d.brS,0][d.ph];
+ const E='<div class="card"><div class="alt-l">Variante E · Jetzt dran</div><div class="row"><h2>'+names[d.ph]+'</h2><span class="muted">noch '+f(curT-curS)+' €</span></div><div style="margin-top:8px">'+list+'</div><div class="chips2">'+names.map((n,i)=>i===d.ph?'':'<button data-go="'+keys[i]+'">'+(i<d.ph?'Vorher: ':'Danach: ')+n+' · '+f([d.preT,d.brT,d.post][i])+' €</button>').join('')+'</div></div>';
+ const cards=[[0,d.preS,d.preT],[1,d.brS,d.brT],[2,0,d.post]].map(([i,s,t])=>{const st=status(s,t);return '<button data-go="'+keys[i]+'"><div class="row"><span class="muted" style="font-weight:600">'+names[i]+'</span><span class="st" style="background:'+st[1]+';color:'+st[2]+'">'+(i===d.ph?'Jetzt':st[0])+'</span></div><div class="num" style="font-size:32px">'+f(t-s)+' €</div><span class="muted">übrig von '+f(t)+' €</span><div class="bar" style="margin-top:4px"><i style="width:'+Math.min(100,t?s/t*100:0)+'%"></i></div></button>'}).join('');
+ const F='<div><div class="alt-l" style="padding:0 4px">Variante F · Wischen</div><div class="car">'+cards+'</div><div class="cdots">'+[0,1,2].map(i=>'<i style="'+(i===d.ph?'background:var(--g);width:16px':'')+'"></i>').join('')+'</div></div>';
+ const cpm=d.post/3,pts=[['Heute',d.inc]];let bal=d.inc-d.preM;const br1=d.brM*5/20,br2=d.brM-br1;
+ bal-=br1+cpm;pts.push(['Ende Dez',bal]);bal-=br2+cpm;pts.push(['Ende Jan',bal]);bal-=cpm;pts.push(['Ende Feb',bal]);
+ const vals=pts.map(p=>p[1]),mx=Math.max(...vals,1),mn=Math.min(...vals,0),W=300,H=110,px=i=>20+i*(W-40)/3,py=v=>12+(mx-v)/(mx-mn||1)*(H-34);
+ const line=pts.map((p,i)=>(i?'L':'M')+px(i).toFixed(1)+' '+py(p[1]).toFixed(1)).join(' ');
+ const G='<div class="card"><div class="alt-l">Variante G · Kontostand-Verlauf</div><div class="row"><span class="muted">Ende Februar</span><b class="num'+(bal<0?' neg':'')+'" style="font-size:22px">'+f(bal)+' €</b></div><svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;margin-top:8px" role="img" aria-label="Kontostand-Verlauf">'+(mn<0?'<line x1="10" x2="'+(W-10)+'" y1="'+py(0)+'" y2="'+py(0)+'" stroke="var(--r)" stroke-dasharray="3 4" stroke-width="1"/>':'')+'<path d="'+line+' L'+px(3)+' '+(H-22)+' L'+px(0)+' '+(H-22)+'Z" fill="rgba(91,216,138,.12)"/><path d="'+line+'" fill="none" stroke="var(--g)" stroke-width="2.5" stroke-linejoin="round"/>'+pts.map((p,i)=>'<circle cx="'+px(i)+'" cy="'+py(p[1])+'" r="4" fill="'+(p[1]<0?'var(--r)':'var(--g)')+'"/><text x="'+px(i)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="var(--mute)">'+p[0]+'</text>').join('')+'</svg><div class="row" style="margin-top:4px">'+pts.map(p=>'<span class="muted" style="font-size:11px;flex:1;text-align:center">'+f(p[1])+' €</span>').join('')+'</div></div>';
+ const H2='<div class="card amp"><div class="alt-l">Variante H · Ampel</div>'+[[0,d.preS,d.preT],[1,d.brS,d.brT],[2,0,d.post]].map(([i,s,t])=>{const st=status(s,t);return '<button data-go="'+keys[i]+'"><span class="st" style="background:'+st[1]+';color:'+st[2]+'">'+st[0]+'</span><span style="flex:1;font-weight:500">'+names[i]+'</span><span class="amt">'+f(t-s)+' €<span class="eq">übrig</span></span></button>'}).join('')+'<div class="row" style="padding-top:12px"><span class="muted">Puffer danach</span><b class="num'+(d.buf<0?' neg':'')+'" style="font-size:20px">'+f(d.buf)+' €</b></div></div>';
+ box.innerHTML=E+F+G+H2}
 function init(){const ph=document.getElementById('phases');if(!ph)return setTimeout(init,100);
  if(!document.getElementById('phaseAlt')){const b=document.createElement('div');b.id='phaseAlt';b.style.cssText='display:flex;flex-direction:column;gap:20px';ph.after(b)}
  new MutationObserver(()=>setTimeout(draw,0)).observe(ph,{childList:true});draw()}
