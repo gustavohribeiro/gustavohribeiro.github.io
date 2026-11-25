@@ -1,17 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{--bg:#070B16;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.08);--track:rgba(255,255,255,.08);--ink:#EEF2FF;--mute:#9AA4C0;--dim:#7F8AAD;--g:#6E8BFF;--y:#38E1D6;--b:#6E8BFF;--r:#FF6B8B}
-html,body{background:radial-gradient(120% 55% at 50% -10%,#18235A 0%,#070B16 60%) fixed!important}
-body,button,input,select,label{font-family:'Manrope',system-ui,sans-serif!important}
-h1,h2,.num,input[type=number]{font-family:'Manrope',system-ui,sans-serif!important;font-weight:800!important;letter-spacing:-.8px!important}
-h1{font-size:38px!important}
-.card,.w{border:1px solid var(--line);border-radius:28px!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.btn.pri,.pill,.vt button.on{background:linear-gradient(135deg,#6E8BFF,#38E1D6)!important;color:#070B16!important}
-.btn{border-radius:16px!important}
-.seg{border:1px solid var(--line);border-radius:16px!important}
-.seg button.on{background:rgba(110,139,255,.2)!important}
-.dock{border-radius:22px!important;background:rgba(12,18,40,.78)!important;border-color:rgba(255,255,255,.1)!important;padding:6px!important}
-.dock button{flex-direction:row!important;width:auto!important;min-width:52px;padding:0 14px!important;gap:8px!important;font-size:13px!important;border-radius:16px!important}
+.dock{padding:6px!important}
+.dock button{flex-direction:row!important;width:auto!important;min-width:52px;padding:0 16px!important;gap:8px!important;font-size:13px!important;border-radius:999px!important;transition:background .25s,color .25s,padding .25s}
 .dock button:not(.on){font-size:0!important;gap:0!important}
-.dock button.on{background:rgba(110,139,255,.22)!important;color:#fff!important}
-.bar{height:6px!important}
-.panel{background:#0E1430!important;border:1px solid var(--line);border-bottom:0}
+.dock button.on{background:#2C2F37!important;color:var(--ink)!important}
