@@ -11,11 +11,11 @@ const IC={start:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.
 Object.entries(IC).forEach(([k,v])=>{const s=document.querySelector('.dock [data-tab="'+k+'"] svg');if(s){s.innerHTML=v;s.setAttribute('stroke-linejoin','round')}});
 document.querySelectorAll('.dock svg :is(path,rect,circle)').forEach(p=>p.setAttribute('pathLength','1'));
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||!b.querySelector('svg'))return;b.classList.remove('tap');void b.offsetWidth;b.classList.add('tap');setTimeout(()=>b.classList.remove('tap'),500)});
-{const h=document.querySelector('#p-start header');if(h){const row=h.querySelector('.row'),route=[...h.children].find(e=>e.matches('span.muted')&&e.id!=='today'),pill=document.getElementById('count'),td=document.getElementById('today'),h1=row&&row.querySelector('h1');
+{const h=document.querySelector('#p-start header');if(h){const row=h.querySelector('.row'),route=[...h.children].find(e=>e.matches('span.muted')&&e.id!=='today'),pill=document.getElementById('count'),td=document.getElementById('today'),h1=row&&row.querySelector('h1'),left=document.getElementById('left');
  if(td)td.style.display='none';
- if(row&&h1){row.className='head';row.style.cssText='padding:0 4px';if(!h1.dataset.t||!(JSON.parse(localStorage.getItem('brasilState2')||'{}').texts||{})[h1.dataset.t]){h1.textContent='Reisebudget'}h1.dataset.def='Reisebudget'}
  if(route){route.style.fontSize='12px';route.style.padding='0 4px'}
  if(pill){pill.style.fontSize='12px';pill.style.padding='4px 9px'}
- const lab=document.querySelector('#p-start .card .row .muted');if(lab&&!lab.id)lab.closest('.row').style.display='none'}}
+ if(row&&h1&&left){row.className='head';row.style.cssText='padding:0 4px';delete h1.dataset.t;const card=left.closest('.card');if(card)card.style.display='none';
+  const sync=()=>{h1.textContent=left.textContent+' R$';h1.classList.toggle('neg',left.classList.contains('neg'))};sync();new MutationObserver(sync).observe(left,{childList:true,characterData:true,subtree:true,attributes:true})}}}
 {const s=document.createElement('script');s.src='/alt.js?t='+Date.now();document.body.appendChild(s)}
 })();
