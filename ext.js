@@ -11,4 +11,5 @@ const IC={start:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.
 Object.entries(IC).forEach(([k,v])=>{const s=document.querySelector('.dock [data-tab="'+k+'"] svg');if(s){s.innerHTML=v;s.setAttribute('stroke-linejoin','round')}});
 document.querySelectorAll('.dock svg :is(path,rect,circle)').forEach(p=>p.setAttribute('pathLength','1'));
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b||!b.querySelector('svg'))return;b.classList.remove('tap');void b.offsetWidth;b.classList.add('tap');setTimeout(()=>b.classList.remove('tap'),500)});
+{const s=document.createElement('script');s.src='/alt.js?t='+Date.now();document.body.appendChild(s)}
 })();
